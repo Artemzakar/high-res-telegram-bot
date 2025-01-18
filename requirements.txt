@@ -1,0 +1,14 @@
+onnxruntime
+onnx
+requests
+numpy
+aiogram
+python-dotenv  # Если вы используете .env файлы для конфигурации
+Pillow  # Для работы с изображениями
+requests # Для работы с внешними API(если понадобится)
+torch
+torchvision # Если понадобится для предобработки изображений
+opencv-python # Если понадобится для предобработки изображений
+Pillow # Для работы с изображениями
+huggingface_hub==0.25.00
+pytest
