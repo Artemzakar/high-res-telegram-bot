@@ -1,36 +1,39 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
-import logging
 import asyncio
+import logging
 
-API_TOKEN = '7846671215:AAHXGXKbGMFSV-lo4pjy8PcHd_mG2klTACE'
+from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.client.bot import DefaultBotProperties
 
-# Включение логирования
-logging.basicConfig(level=logging.INFO)
+from bot.config import BOT_TOKEN, LOG_LEVEL, LOG_FILE, ACTIVE_MODEL_PATH
+from bot.handlers import router
+from model.inference import load_onnx_model
 
-bot = Bot(token=API_TOKEN)
-dp = Dispatcher()
+# Настройка логирования
+logging.basicConfig(level=LOG_LEVEL, filename=LOG_FILE, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logger = logging.getLogger(__name__)
 
-# Команда /start
-@dp.message(Command("start"))
-async def send_welcome(message: types.Message):
-    await message.reply("Привет! Я тестовый бот.")
+async def main():
+    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    storage = MemoryStorage()
+    dp = Dispatcher(storage=storage)
 
-# Команда /help
-@dp.message(Command("help"))
-async def send_help(message: types.Message):
-    await message.reply("Это тестовый бот для команд.\nКоманды:\n/start - Приветствие\n/help - Помощь")
+    logger.info("Загрузка ONNX модели...")
+    model_session = load_onnx_model(ACTIVE_MODEL_PATH)
+    if not model_session:
+        logger.critical("Не удалось загрузить ONNX модель. Завершение работы.")
+        return
 
-# Команда /test
-@dp.message(Command("test"))
-async def send_test(message: types.Message):
-    await message.reply("Тестовая команда выполнена!")
+    dp.workflow_data["model_session"] = model_session
 
-# Хэндлер для всех сообщений
-@dp.message()
-async def echo(message: types.Message):
-    await message.answer(f"Вы написали: {message.text}")
+    dp.include_router(router)
 
-if __name__ == '__main__':
-    # Запуск polling с передачей объекта бота
-    asyncio.run(dp.start_polling(bot))
+    logger.info("Бот запущен")
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print('Exit')
