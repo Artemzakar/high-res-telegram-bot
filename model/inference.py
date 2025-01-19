@@ -1,8 +1,9 @@
-import onnxruntime as rt
-import numpy as np
-from PIL import Image
-import cv2
 import asyncio
+
+import numpy as np
+import onnxruntime as rt
+from PIL import Image
+
 
 def load_onnx_model(model_path):
     """Загружает модель ONNX."""
@@ -12,6 +13,7 @@ def load_onnx_model(model_path):
     except RuntimeError as e:
         print(f"Ошибка загрузки модели ONNX: {e}")
         return None
+
 
 async def predict_onnx(session, image_path):
     """Выполняет предсказание с помощью загруженной модели ONNX асинхронно."""
