@@ -15,3 +15,4 @@ pytest
 flake8
 black
 isort
+pytest-asyncio

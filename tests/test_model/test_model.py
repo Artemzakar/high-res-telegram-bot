@@ -1,10 +1,9 @@
 import os
-# Путь к директории проекта для корректного импорта config
-import sys
-
 import pytest
 from PIL import Image
 
+# Путь к директории проекта для корректного импорта config
+import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from bot import config
@@ -34,7 +33,8 @@ def output_dir():
     return output_dir_path
 
 
-def test_inference_on_input_images(inference_session, input_dir, output_dir):
+@pytest.mark.asyncio
+async def test_inference_on_input_images(inference_session, input_dir, output_dir):
     """Тестирует инференс модели на всех изображениях из входной директории."""
     input_files = sorted(
         [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
@@ -51,7 +51,8 @@ def test_inference_on_input_images(inference_session, input_dir, output_dir):
         output_file = f"output{input_file[len('input'):]}"
         output_path = os.path.join(output_dir, output_file)
 
-        output_image = inference.predict_onnx(inference_session, input_path)
+        # Используем await для вызова асинхронной функции
+        output_image = await inference.predict_onnx(inference_session, input_path)
         assert output_image is not None, f"Ошибка при обработке файла: {input_file}"
 
         if output_image:
