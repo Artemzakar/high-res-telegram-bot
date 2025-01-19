@@ -7,3 +7,4 @@ __pycache__/
 bot/config.py
 .venv/
 share/man/man1
+bot/bot.log

@@ -2,17 +2,22 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.bot import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.client.bot import DefaultBotProperties
 
-from bot.config import BOT_TOKEN, LOG_LEVEL, LOG_FILE, ACTIVE_MODEL_PATH
+from bot.config import ACTIVE_MODEL_PATH, BOT_TOKEN, LOG_FILE, LOG_LEVEL
 from bot.handlers import router
 from model.inference import load_onnx_model
 
 # Настройка логирования
-logging.basicConfig(level=LOG_LEVEL, filename=LOG_FILE, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logging.basicConfig(
+    level=LOG_LEVEL,
+    filename=LOG_FILE,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+)
 logger = logging.getLogger(__name__)
+
 
 async def main():
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
@@ -32,8 +37,9 @@ async def main():
     logger.info("Бот запущен")
     await dp.start_polling(bot)
 
+
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print('Exit')
+        print("Exit")

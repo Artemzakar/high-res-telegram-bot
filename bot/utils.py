@@ -1,17 +1,20 @@
-import os
 import logging
+import os
 import tempfile
-from PIL import Image
-from aiogram import types, Bot
-import onnxruntime as rt
-import aiohttp
 
-from model.inference import load_onnx_model, predict_onnx
-from bot.config import ACTIVE_MODEL_PATH
+import aiohttp
+import onnxruntime as rt
+from aiogram import Bot, types
+# from PIL import Image
+
+from model.inference import predict_onnx
 
 logger = logging.getLogger(__name__)
 
-async def process_image(image_path: str, model_session: rt.InferenceSession) -> str or None:
+
+async def process_image(
+    image_path: str, model_session: rt.InferenceSession
+) -> str or None:
     """
     Обрабатывает изображение с использованием ONNX модели.
 
@@ -29,14 +32,19 @@ async def process_image(image_path: str, model_session: rt.InferenceSession) -> 
             # Сохраняем обработанное изображение во временный файл
             with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_file:
                 enhanced_image.save(tmp_file.name)
-                logger.info(f"Изображение успешно обработано и сохранено: {tmp_file.name}")
+                logger.info(
+                    f"Изображение успешно обработано и сохранено: {tmp_file.name}"
+                )
                 return tmp_file.name
         else:
             logger.error(f"Ошибка при обработке изображения: {image_path}")
             return None
     except Exception as e:
-        logger.exception(f"Произошла ошибка при обработке изображения {image_path}: {e}")
+        logger.exception(
+            f"Произошла ошибка при обработке изображения {image_path}: {e}"
+        )
         return None
+
 
 def cleanup_file(file_path: str):
     """Удаляет файл по указанному пути."""
@@ -45,6 +53,7 @@ def cleanup_file(file_path: str):
         logger.info(f"Файл успешно удален: {file_path}")
     except Exception as e:
         logger.error(f"Ошибка при удалении файла {file_path}: {e}")
+
 
 async def download_photo(photo: types.PhotoSize, bot: Bot) -> str or None:
     """Скачивает фотографию и возвращает путь к скачанному файлу."""
@@ -66,6 +75,7 @@ async def download_photo(photo: types.PhotoSize, bot: Bot) -> str or None:
     except Exception as e:
         logger.error(f"Ошибка при скачивании фотографии: {e}")
         return None
+
 
 async def download_document(document: types.Document, bot: Bot) -> str or None:
     """Скачивает документ и возвращает путь к скачанному файлу."""
