@@ -1,23 +1,26 @@
-import torch
 import os
+
+import torch
+
 from model.export.RealESRGAN import RealESRGAN
+
 
 def export_model_to_onnx(weights_path, output_onnx_path, scale):
     """Экспортирует модель RealESRGAN в ONNX формат с динамическими размерами."""
-    device = torch.device('cpu')  # Используем CPU для стабильности
+    device = torch.device("cpu")  # Используем CPU для стабильности
     try:
         model = RealESRGAN(device, scale=scale)
-        model.load_weights(weights_path)  # Убираем download
+        model.load_weights(weights_path)
     except Exception as e:
         print(f"Ошибка загрузки или инициализации модели из {weights_path}: {e}")
         return
 
-    # Теперь вызываем модель для предсказания с dummy_input до экспорта
+    # Вызываем модель для предсказания с dummy_input до экспорта
     dummy_input = torch.randn(1, 3, 256, 256, device=device)
     with torch.no_grad():
         output = model.model(dummy_input)
 
-    # Теперь экспорт с указанием динамических осей для высоты и ширины
+    # Экспорт с указанием динамических осей для высоты и ширины
     try:
         torch.onnx.export(
             model.model,
@@ -28,18 +31,21 @@ def export_model_to_onnx(weights_path, output_onnx_path, scale):
             do_constant_folding=True,
             input_names=["input"],
             output_names=["output"],
-            dynamic_axes={'input': {0: 'batch_size', 2: 'height', 3: 'width'},
-                          'output': {0: 'batch_size', 2: 'height', 3: 'width'}}
+            dynamic_axes={
+                "input": {0: "batch_size", 2: "height", 3: "width"},
+                "output": {0: "batch_size", 2: "height", 3: "width"},
+            },
         )
         print(f"Модель из {weights_path} успешно экспортирована в {output_onnx_path}")
     except Exception as e:
         print(f"Ошибка экспорта модели из {weights_path}: {e}")
 
+
 if __name__ == "__main__":
     weights_dir = "weights"
     output_dir = "../versions"
 
-    # Создаем папку versions, если ее нет
+    # Создаем папку versions
     os.makedirs(output_dir, exist_ok=True)
 
     for filename in os.listdir(weights_dir):
