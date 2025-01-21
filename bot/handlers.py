@@ -28,14 +28,15 @@ async def help_command(message: types.Message):
         "<b>Как пользоваться:</b>\n"
         "1. Просто отправь мне фотографию или изображение как документ.\n"
         "2. Я обработаю его и пришлю улучшенную версию.\n\n"
-        "<b>Поддерживаемые форматы:</b> JPG, PNG\n\n"
-        "Если у тебя есть вопросы или предложения, свяжись с разработчиком."
+        "<b>Поддерживаемые форматы:</b> JPG, PNG, JPEG, BMP, WEBP\n\n"
+        "Если у тебя есть вопросы или предложения, свяжись с разработчиком: @a_r_t_e_m74"
     )
     await message.answer(help_text, parse_mode="HTML")
 
 
 @router.message(F.photo | F.document)
 async def process_image_message(message: types.Message, model_session, bot: Bot):
+    """Обработчик фото для улучшения качества."""
     if message.photo:
         file_path = await download_photo(message.photo[-1], bot)
     elif message.document and message.document.mime_type.startswith("image/"):
@@ -83,8 +84,9 @@ async def process_image_message(message: types.Message, model_session, bot: Bot)
         cleanup_file(file_path)
 
 
-@router.message()  # Этот обработчик будет срабатывать на все остальные сообщения
+@router.message()
 async def unknown_message(message: types.Message):
+    """Обработчик неизвестных команд."""
     await message.answer(
         "Извини, я не понимаю эту команду. Используй /start, чтобы начать, или /help, чтобы узнать больше."
     )

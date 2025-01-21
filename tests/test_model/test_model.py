@@ -42,7 +42,7 @@ async def test_inference_on_input_images(inference_session, input_dir, output_di
 
     for input_file in input_files:
         if not input_file.lower().endswith(
-            (".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp")
+            (".png", ".jpg", ".jpeg", ".bmp", ".webp")
         ):
             pytest.skip(f"Пропускаем не поддерживаемый формат файла: {input_file}")
             continue
