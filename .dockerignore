@@ -1,0 +1,9 @@
+venv/
+Lib/
+Scripts/
+pyvenv.cfg
+.idea/
+__pycache__/
+.venv/
+share/man/man1
+bot/bot.log
