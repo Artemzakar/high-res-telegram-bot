@@ -10,7 +10,7 @@ COPY requirements.txt .
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем исходный код твоего бота
+# Копируем исходный код бота
 COPY bot ./bot
 COPY model ./model
 
