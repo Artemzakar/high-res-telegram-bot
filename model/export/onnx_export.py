@@ -18,7 +18,7 @@ def export_model_to_onnx(weights_path, output_onnx_path, scale):
     # Вызываем модель для предсказания с dummy_input до экспорта
     dummy_input = torch.randn(1, 3, 256, 256, device=device)
     with torch.no_grad():
-        output = model.model(dummy_input)
+        model.model(dummy_input)
 
     # Экспорт с указанием динамических осей для высоты и ширины
     try:
