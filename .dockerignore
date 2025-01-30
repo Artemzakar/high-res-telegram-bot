@@ -4,7 +4,6 @@ Scripts/
 pyvenv.cfg
 .idea/
 __pycache__/
-bot/config.py
 .venv/
-share/
 bot/bot.log
+share/

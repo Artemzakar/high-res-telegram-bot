@@ -1,10 +1,16 @@
 import asyncio
 import logging
+import sys
+import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
+
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+BOT_DIR = os.path.join(PROJECT_ROOT, "..")
+sys.path.append(BOT_DIR)
 
 from bot.config import ACTIVE_MODEL_PATH, BOT_TOKEN, LOG_FILE, LOG_LEVEL
 from bot.handlers import router

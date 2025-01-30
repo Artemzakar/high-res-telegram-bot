@@ -6,9 +6,13 @@ from PIL import Image
 
 
 def load_onnx_model(model_path):
-    """Загружает модель ONNX."""
+    """Загружает модель ONNX и выбирает провайдера выполнения."""
     try:
-        session = rt.InferenceSession(model_path)
+        if 'CUDAExecutionProvider' in rt.get_available_providers():
+            providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
+        else:
+            providers = ['CPUExecutionProvider']
+        session = rt.InferenceSession(model_path, providers=providers)
         return session
     except RuntimeError as e:
         print(f"Ошибка загрузки модели ONNX: {e}")

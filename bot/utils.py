@@ -5,7 +5,6 @@ import tempfile
 import aiohttp
 import onnxruntime as rt
 from aiogram import Bot, types
-# from PIL import Image
 
 from model.inference import predict_onnx
 
