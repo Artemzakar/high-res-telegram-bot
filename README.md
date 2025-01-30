@@ -285,6 +285,8 @@ pytest tests/test_model/
 | <img src="tests/test_model/test_data/input/input4.jpg" width="250" alt="Входное изображение 4"> | <img src="tests/test_model/test_data/output/output4.jpg" width="250" alt="Выходное изображение 4"> |
 | <img src="tests/test_model/test_data/input/input5.jpg" width="250" alt="Входное изображение 5"> | <img src="tests/test_model/test_data/output/output5.jpg" width="250" alt="Выходное изображение 5"> |            | **Описание выходного изображения:**  Улучшенный JPEG после обработки моделью. |
 
+[Демонстрация работы Telegram-бота PicBoost на видео](https://youtu.be/o3LqMD2T5x8?si=fqtBdByFbkQ0L9To)
+[![Watch the video](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/vt5fpE0bzSY)
 ## Линтинг кода
 
 Для поддержания качества кода и соответствия стандартам стиля, в проекте настроен линтер `flake8`. Конфигурация линтера находится в файле `.flake8` в корне проекта.
